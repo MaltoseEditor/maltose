@@ -1,0 +1,147 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <title>About Me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'style/normalize.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
+</head>
+
+<style>
+    html {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        font-family: 'Times New Roman', Times, "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", serif;
+        font-size: calc(1vmin + 12px);
+        background-color: #FFFFFF;
+    }
+
+    header {
+        padding: 0 0 30px 0;
+    }
+
+    .portrait {
+        position: relative;
+        padding: 20px 0 40px 0;
+        border-bottom: 1px solid black;
+    }
+
+    .portrait img {
+        width: 6em;
+        height: 6em;
+        border-radius: 100%;
+    }
+
+    .name {
+        position: relative;
+        top: -.7em;
+        display: inline;
+        font-weight: 400;
+        font-size: 1.7em;
+        font-family: 'Dancing Script', cursive;
+        background-color: #FFFFFF;
+        padding: 0 20px;
+        margin: auto;
+    }
+
+    .info {
+        font-size: .6em;
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    main {
+        padding: 0 10%;
+    }
+
+    #pay {
+        margin-top: 100px;
+    }
+
+    .line-border {
+        position: relative;
+        border: 1px solid black;
+        max-width: 600px;
+        padding: 15px 25px;
+        margin: 5vh auto;
+        margin-bottom: 10vh;
+        font-size: .7em;
+        text-align: start;
+    }
+
+    .line-border:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .line-border a {
+        color: black;
+        text-decoration: none;
+    }
+
+    .line-border .message {
+        background-color: #FFFFFF;
+        display: inline;
+        position: absolute;
+        top: -1.1em;
+        left: 20px;
+        padding: 5px;
+    }
+
+    .icon {
+        width: 2.4em;
+        margin: 0 5px;
+    }
+
+</style>
+
+<body>
+<header>
+    <div class="portrait">
+        <a href="/"><img src="{% static 'image/portrait.ico' %}" alt="AberSheeran"/></a>
+    </div>
+    <div class="name">
+        Aber Sheeran
+    </div>
+    <div class="info">
+        I know nothing except the fact of my ignorance.
+    </div>
+</header>
+
+<main>
+
+    <div class="line-border">
+        <div class="message">个人介绍</div>
+        <p>大三生，2020年消灭贫困人口计划中的被消灭群众的一员</p>
+        <p>没事喜欢写点代码，酒精过敏，不喜抽烟，钱都拿去养大猪蹄子
+            <del>和买零食</del>
+            。<br/>有意向购买<a href="https://github.com/AberSheeran/pixiv.app">pixiv.app</a>者可联系我
+        </p>
+    </div>
+
+    <div class="line-border" style="text-align: center;">
+        <div class="message">联系方式</div>
+        <a href="https://github.com/AberSheeran" target="_blank">
+            <img class="icon" src="{% static 'image/github-black.png' %}" alt="Github"/>
+        </a>
+        <a href="mailto:AberSheeran@qq.com">
+            <img class="icon" src="{% static 'image/mail.png' %}" alt="eMail"/>
+        </a>
+        <a href="https://twitter.com/Mr_Time__" target="_blank">
+            <img class="icon" src="{% static 'image/twitter.png' %}" alt="Twitter"/>
+        </a>
+    </div>
+
+</main>
+
+</body>
+
+</html>

@@ -1,0 +1,148 @@
+{% extends 'article/base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dancing+Script">
+<link rel="stylesheet" href="{% static 'style/pure.min.css' %}">
+<link rel="stylesheet" href="{% static 'style/main.css' %}">
+{% endblock %}
+
+{% block body %}
+
+{% block header %}
+<header>
+    <section onclick="showMenu()">
+        <div class="portrait">
+            <img src="/static/image/portrait.ico" alt="Aber Sheeran">
+        </div>
+        <div class="signature">
+            I know nothing except the fact of my ignorance.
+            <br />
+            <br />
+        </div>
+    </section>
+    <nav>
+        <div id="search">
+            <input onkeyup="search_submit(event)" onblur="search_blur(event)" onfocus="search_focus(event)"
+                placeholder="搜索" type="text" />
+        </div>
+        <div class="item">
+            <a href="/about/" target="_blank">
+                关于
+            </a>
+        </div>
+        <div class="item">
+            <a href="/about/" target="_blank">
+                联系
+            </a>
+        </div>
+        <div class="item">
+            <a href="/feed.xml" target="_blank">
+                订阅
+            </a>
+        </div>
+        <div class="item">
+            <a href="/about/donation.html" target="_blank">
+                赞助
+            </a>
+        </div>
+    </nav>
+    <aside>
+        <p class="head" onclick="displayItems(event)">
+            <span>时间轴:&nbsp;</span>
+            <span class="more">
+                <span class="left-line"></span>
+                <span class="right-line"></span>
+            </span>
+        </p>
+        <div class="items" hidden>
+            {% for time in time_list %}
+            <p class="item">
+                <a href="{% url 'article:get_time' time.date|date:'Y' time.date|date:'m' %}" target="_blank">
+                    {{ time.date | date:"Y年m月" }}
+                </a>
+                <span class="count">({{ time.count }})</span>
+            </p>
+            {% endfor %}
+        </div>
+    </aside>
+    <aside id="corpus">
+        <p class="head" onclick="displayItems(event)">
+            <span>文集:&nbsp;</span>
+            <span class="more">
+                <span class="left-line"></span>
+                <span class="right-line"></span>
+            </span>
+        </p>
+        <div class="items" hidden>
+            {% for corpus in corpuses %}
+            <p class="item">
+                <a href="{% url 'article:get_corpus' corpus.name %}" target="_blank">{{ corpus.name }}</a>
+                <span class="count">({{ corpus.count }})</span>
+            </p>
+            {% endfor %}
+        </div>
+    </aside>
+    <aside id="friends'link">
+        <p class="head" onclick="displayItems(event)">
+            <span>友情链接:&nbsp;</span>
+            <span class="more">
+                <span class="left-line"></span>
+                <span class="right-line"></span>
+            </span>
+        </p>
+        <div class="items" hidden>
+            {% for friend in friends %}
+            <p class="item">
+                <a href="{{ friend.link }}" target="_blank">{{ friend.name }}</a>
+            </p>
+            {% endfor %}
+        </div>
+    </aside>
+    <footer>
+        <div class="other-icon">
+            <a id="github" href="https://github.com/AberSheeran" target="_blank"></a>
+        </div>
+        <p>Copyright&copy;2018 <br> Designed by
+            <a href="https://github.com/AberSheeran/maltose" target="_blank"
+                style="text-decoration: underline;">AberSheeran</a>
+        </p>
+    </footer>
+</header>
+<a id="toTop" onclick="window.scrollTo(0, 0);">
+    <span>
+        <svg class="icon" style="width: 1em; height: 1em; vertical-align: middle; fill: currentcolor; overflow: hidden;"
+            viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M573.056 272l308.8 404.608A76.8 76.8 0 0 1 820.736 800H203.232a76.8 76.8 0 0 1-61.056-123.392L450.976 272a76.8 76.8 0 0 1 122.08 0z">
+            </path>
+        </svg>
+    </span>
+</a>
+{% endblock %}
+{% block main %}
+<main>
+    <div id="articles">
+        {% for article in articles %}
+        <article>
+            <div class="title">
+                <a href="{% url 'article:get_article' article.slug %}" target="_blank">{{ article.title }}</a>
+            </div>
+            <div class="summary">
+                {{ article.body | striptags | slice:":100" }}...
+            </div>
+            {% if article.corpus %}
+            <div class="corpus" hidden>
+                <a href="{% url 'article:get_corpus' article.corpus %}">{{ blog.corpus }}</a>
+            </div>
+            {% endif %}
+            <time>
+                {{ article.create_time | date:"Y-m-d" }}
+            </time>
+        </article>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
+<script src="{% static 'script/aside.js' %}"></script>
+{% endblock %}

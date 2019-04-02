@@ -1,0 +1,4 @@
+Django==2.1.7
+Pillow==5.3.0
+Markdown==2.6.11
+Pygments==2.2.0

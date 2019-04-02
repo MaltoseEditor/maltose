@@ -1,0 +1,38 @@
+@keyframes spaning {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg)
+    }
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+#loading {
+    height: 100px;
+    width: 100px;
+    margin: auto;
+    padding: 10px;
+    clear: both;
+    div {
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        border-top: 4px black solid;
+        border-bottom: 4px black solid;
+        border-left: 4px transparent solid;
+        border-right: 4px transparent solid;
+        margin: auto;
+        animation: spaning 1s infinite linear;
+    }
+}
+
+#load_error {
+    text-align: center;
+    padding: 20px 30px 30px;
+    width: 160px;
+    margin: auto;
+    clear: both;
+}

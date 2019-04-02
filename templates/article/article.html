@@ -1,0 +1,73 @@
+{% extends 'article/base.html' %}
+{% load static %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'style/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'style/article.css' %}">
+    <link rel="stylesheet" href="{% static 'style/article/other.css' %}">
+    <link rel="stylesheet" href="{% static 'style/highlight.css' %}">
+{% endblock %}
+
+{% block body %}
+
+    <main>
+        <div class="detail">
+            <h1 class="title"><a href="/">{{ article.title }}</a></h1>
+            <span class="data">创建于
+                <time>{{ article.create_time | date:'Y年m月d日' }}</time>
+            </span>
+            丨
+            <span class="data">访问量:
+                <span class="71tui-view-count"  view="{{ settings.HOMEPAGE }}{% url 'article:get_article' article.slug %}"></span>
+            </span>
+        </div>
+
+        <div class="time-warning" hidden>
+            距离文章最后一次编辑的时间已经过去了很久，或许此文已经不适合现在的情况。<br>
+            如有问题, 可留下评论获取帮助
+        </div>
+
+        <div class="markdown-body">
+            {{ article.body | safe }}
+        </div>
+
+    </main>
+
+    <div id="disqus_thread" hidden></div>
+    <script>
+        function load_error() {
+            document.getElementById('disqus_thread').innerHTML = '<hr style="margin-top: 60px;border: 0; height: 1.3px; background-image: linear-gradient(to right, rgba(167, 167, 167, 0), rgba(167, 167, 167, 0.75), rgba(167, 167, 167, 0));" /><div style="text-align:center;margin:auto;">评论托管于Disqus 大陆内无法常规访问！</div>';
+            document.getElementById('disqus_thread').hidden = false;
+        }
+
+        function load_success() {
+            document.getElementById('disqus_thread').hidden = false;
+        }
+
+        var disqus_config = function () {
+            this.page.url = location.href;
+            this.page.identifier = location.pathname;
+        };
+        (function () { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://abersheeran.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            s.setAttribute('onerror', 'load_error()');
+            s.setAttribute('onload', 'load_success()');
+            s.async = true;
+            d.body.appendChild(s);
+        })();
+    </script>
+    <noscript>
+        Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+    <script>
+        if (new Date() - new Date('{{ article.update_time | date:"Y年m月d日" }}'.replace(/年|月|日/g, '-')) > 365 * 24 * 60 * 60 * 1000) {
+            document.getElementsByClassName('time-warning')[0].hidden = false;
+        }
+    </script>
+
+{% endblock %}
