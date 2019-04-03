@@ -7,9 +7,11 @@ from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
+from .common import push as func_push
+
 
 def push(request):
-    subprocess.Popen('git pull && git add . && git commit -m "Auto commit by Maltose" && git push', cwd=settings.BLOG_REPOSITORIES, shell=True)
+    func_push()
     return JsonResponse({"message": "success"})
 
 

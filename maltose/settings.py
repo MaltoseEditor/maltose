@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'maltose.context_processors.get_debug',
+                'maltose.context_processors.get_settings',
                 'article.context_processors.get_all_timelist',
                 'article.context_processors.get_all_corpus',
                 'article.context_processors.get_all_tag',

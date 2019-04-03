@@ -1,3 +1,8 @@
+import subprocess
+
+from django.conf import settings
+
+
 def create_dict(local=None, field=None, **kwargs):
     """
     以字典的形式从局部变量locals()中获取指定的变量
@@ -12,3 +17,8 @@ def create_dict(local=None, field=None, **kwargs):
     result = {k: v for k, v in local.items() if k in field}
     result.update(**kwargs)
     return result
+
+
+def push():
+    """推送生成的静态页面到远程仓库"""
+    subprocess.Popen('git pull && git add . && git commit -m "Auto commit by Maltose" && git push', cwd=settings.BLOG_REPOSITORIES, shell=True)

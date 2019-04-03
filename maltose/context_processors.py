@@ -7,3 +7,7 @@ def get_debug(request):
         return {"debug": True}
     else:
         return {"debug": False}
+
+
+def get_settings(request):
+    return {"settings": settings}
