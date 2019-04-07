@@ -8,6 +8,21 @@
     <link rel="stylesheet" href="{% static 'style/article.css' %}">
     <link rel="stylesheet" href="{% static 'style/article/other.css' %}">
     <link rel="stylesheet" href="{% static 'style/highlight.css' %}">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    {% if not debug %}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123409811-2"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            gtag('js', new Date());
+            gtag('config', 'UA-123409811-2');
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
