@@ -35,7 +35,7 @@ urlpatterns = [
     path('push', push),
     path('accounts/', include('django.contrib.auth.urls')),
     # 后台界面
-    path('editor/', login_required(serve), kwargs={"path": 'index.html', "document_root": settings.EDITOR_ROOT}),
+    path('editor/', serve, kwargs={"path": 'index.html', "document_root": settings.EDITOR_ROOT}),
     re_path(r'^editor/(?P<path>.*)$', serve, kwargs={"document_root": settings.EDITOR_ROOT}),
 
     path('', include('article.urls')),
