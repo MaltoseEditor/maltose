@@ -10,7 +10,7 @@
 由于作者精力有限，目前只提供由源码生成方法
 
 ```bash
-git clone https://github.com/maltoseeditor/backend.git
+git clone https://github.com/maltoseeditor/maltose.git
 ```
 
 --------
