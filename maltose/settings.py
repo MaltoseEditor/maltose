@@ -15,6 +15,10 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+BLOG_REPOSITORIES = os.getcwd()
+
+TEMPLATE_PATH = os.path.join(BLOG_REPOSITORIES, 'templates')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -58,7 +62,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates')
+            TEMPLATE_PATH
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -86,7 +90,7 @@ WSGI_APPLICATION = 'maltose.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BLOG_REPOSITORIES, 'db.sqlite3'),
     }
 }
 
@@ -124,27 +128,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/templates/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+STATICFILES_DIRS = (
+    os.path.join(TEMPLATE_PATH, 'static'),
+)
 
 MEDIA_URL = '/upload/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
-
-EDITOR_ROOT = os.path.join(BASE_DIR, 'editor/')
-
-# 自定义配置
-
-HOMEPAGE = 'https://abersheeran.com'
-
-BLOG_REPOSITORIES = os.path.join(BASE_DIR, '_build')
-
-STATIC_ROOT = os.path.join(BLOG_REPOSITORIES, "static")
-
 MEDIA_ROOT = os.path.join(BLOG_REPOSITORIES, "upload")
 
-PAGE_MAX_NUM = 13
+EDITOR_ROOT = os.path.join(BASE_DIR, 'editor/')
 
 # Markdown Render Config
 # https://github.com/Python-Markdown/markdown
@@ -167,3 +163,9 @@ MARKDOWN = {
 # https://open.coding.net/webhooks-v2/
 
 WEBHOOK_TOKEN = "loveyou"
+
+# Other Settings
+
+HOMEPAGE = 'https://abersheeran.com'
+
+PAGE_MAX_NUM = 13

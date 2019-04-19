@@ -2,6 +2,8 @@ import os
 import shutil
 from urllib import parse
 
+from django.db.models import Count
+from django.db.models.functions.datetime import TruncMonth
 from django.test import Client
 from django.conf import settings
 from django.urls import reverse
@@ -9,7 +11,7 @@ from django.urls import reverse
 from .models import *
 
 __all__ = [
-    'update',
+    'create',
     'delete',
 ]
 
@@ -18,7 +20,7 @@ def fetch(path) -> str:
     return Client().get(path).content.decode("UTF-8")
 
 
-def _create(path):
+def create(path):
     """
     请求对应的 url 并将结果写入对应文件中
     :param path: 请求的相对路径
@@ -37,7 +39,7 @@ def _create(path):
         file.write(fetch(path))
 
 
-def _delete(path):
+def delete(path):
     """
     删除对应 url 的对应的目录/文件
     :param path: 请求的相对路径
@@ -53,88 +55,59 @@ def _delete(path):
 
 def update_o(name):
     path = reverse(f'article:get_{name}')
-    _create(path)
+    create(path)
 
 
-def _update_home():
+def update_home():
     update_o('home')
 
 
-def _update_sitemap():
+def update_sitemap():
     update_o('sitemap')
 
 
-def _update_feed():
+def update_feed():
     update_o('feed')
 
 
-def _update_article(article: Article, delete=False):
+def update_article(article: Article):
     path = reverse('article:get_article', kwargs={"slug": article.slug})
-    if delete:
-        _delete(path)
-    else:
-        _create(path)
+    create(path)
 
 
-def _update_tag(tag: Tag, delete=False):
+def update_tag(tag: Tag):
     path = reverse('article:get_tag', kwargs={"name": tag.name})
-    if delete:
-        _delete(path)
-    else:
-        _create(path)
+    create(path)
 
 
-def _update_corpus(corpus: Corpus, delete=False):
+def update_corpus(corpus: Corpus):
     path = reverse('article:get_corpus', kwargs={"name": corpus.name})
-    if delete:
-        _delete(path)
-    else:
-        _create(path)
+    create(path)
 
 
-def _update_time(article: Article, delete=False):
-    path = reverse('article:get_time', kwargs={
-        "year": article.create_time.strftime("%Y"),
-        'month': article.create_time.strftime("%m")
-    })
-    if delete:
-        _delete(path)
-    else:
-        _create(path)
-
-
-def update(article: Article):
-    _update_article(article)
-    if article.corpus is not None:
-        _update_corpus(article.corpus)
-    for tag in article.tags.all():
-        _update_tag(tag)
-    _update_time(article)
-    _update_sitemap()
-    _update_feed()
-    _update_home()
+def update_time(year, month):
+    path = reverse('article:get_time', kwargs={"year": year, 'month': month})
+    create(path)
 
 
 def update_all():
+    shutil.rmtree(os.path.join(settings.BLOG_REPOSITORIES, 'articles'), True)
+    shutil.rmtree(os.path.join(settings.BLOG_REPOSITORIES, 'corpus'), True)
+    shutil.rmtree(os.path.join(settings.BLOG_REPOSITORIES, 'tags'), True)
+    shutil.rmtree(os.path.join(settings.BLOG_REPOSITORIES, 'time'), True)
+
+    for corpus in Corpus.objects.annotate(count=Count('article')).filter(count__gte=0):
+        update_corpus(corpus)
+
+    for tag in Tag.objects.annotate(count=Count('article')).filter(count__gte=0):
+        update_tag(tag)
+
+    for time in Article.all().dates('create_time', 'month', order='DESC'):
+        update_time(time.year, time.strftime('%m'))
+
     for article in Article.all():
-        _update_article(article)
-        if article.corpus is not None:
-            _update_corpus(article.corpus)
-        for tag in article.tags.all():
-            _update_tag(tag)
-        _update_time(article)
-    _update_sitemap()
-    _update_feed()
-    _update_home()
+        update_article(article)
 
-
-def delete(article: Article):
-    _update_article(article, delete=True)
-    if article.corpus is not None:
-        _update_corpus(article.corpus)
-    for tag in article.tags.all():
-        _update_tag(tag)
-    _update_time(article)
-    _update_sitemap()
-    _update_feed()
-    _update_home()
+    update_home()
+    update_feed()
+    update_sitemap()

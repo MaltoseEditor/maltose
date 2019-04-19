@@ -5,6 +5,4 @@ _build/
 
 *.py[cod]
 
-db.sqlite3
-
-less.py
+*.sqlite3
