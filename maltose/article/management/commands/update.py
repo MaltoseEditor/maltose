@@ -1,8 +1,8 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
 
-from article.models import Article
-from article.build import update_all, update_o
+from maltose.article.models import Article
+from maltose.article.build import update_all, update_o
 
 
 class Command(BaseCommand):

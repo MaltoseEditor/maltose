@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import json
+import colorama
+
+colorama.init(autoreset=True)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -166,6 +170,29 @@ WEBHOOK_TOKEN = "loveyou"
 
 # Other Settings
 
-HOMEPAGE = 'https://abersheeran.com'
-
 PAGE_MAX_NUM = 13
+
+try:
+    with open(os.path.join(BLOG_REPOSITORIES, "maltose.json"), "r", encoding="UTF-8") as _Config:
+        _data = json.load(_Config)
+
+        for key, value in _data.items():
+            locals()[key.upper()] = value
+
+except FileNotFoundError:
+    print(colorama.Fore.RED + "The 'maltose.json' not found")
+    print(colorama.Fore.BLUE + "Creating the 'maltose.json' in root directory.")
+    print(colorama.Fore.BLUE + "If you want to create config.json by yourself, press Ctrl+C to quit.")
+    try:
+        _data = dict()
+        _data["HOMEPAGE"] = input("Your blog link(like=> https://abersheeran.com): ")
+
+        with open(os.path.join(BLOG_REPOSITORIES, "maltose.json"), "w", encoding="UTF-8") as _Config:
+            json.dump(_data, _Config)
+
+        for key, value in _data.items():
+            locals()[key.upper()] = value
+
+    except KeyboardInterrupt:
+        print(colorama.Fore.GREEN + "\r\nCancel to create config.json.")
+        raise SystemExit(0)

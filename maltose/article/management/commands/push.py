@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from maltose.common import push
+from maltose.maltose.common import push
 
 
 class Command(BaseCommand):
