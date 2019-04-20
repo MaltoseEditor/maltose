@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-from maltose import main
+from maltose import execute
+
 
 if __name__ == "__main__":
-    main()
+    execute()

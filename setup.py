@@ -122,13 +122,13 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    packages=find_packages(include=["maltose", "maltose.*", "maltose/*"]),
+    packages=find_packages(include=["maltose", 'maltose.*']),
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
 
     scripts=['maltose-cli.py'],
     entry_points={
-        # 'console_scripts': ['maltose-cli=maltose:main'],
+        'console_scripts': ['maltose-cli=maltose:execute'],
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,

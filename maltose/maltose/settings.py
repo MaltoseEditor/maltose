@@ -182,7 +182,7 @@ try:
 except FileNotFoundError:
     print(colorama.Fore.RED + "The 'maltose.json' not found")
     print(colorama.Fore.BLUE + "Creating the 'maltose.json' in root directory.")
-    print(colorama.Fore.BLUE + "If you want to create config.json by yourself, press Ctrl+C to quit.")
+    print(colorama.Fore.BLUE + "If you want to create maltose.json by yourself, press Ctrl+C to quit.")
     try:
         _data = dict()
         _data["HOMEPAGE"] = input("Your blog link(like=> https://abersheeran.com): ")
@@ -194,5 +194,5 @@ except FileNotFoundError:
             locals()[key.upper()] = value
 
     except KeyboardInterrupt:
-        print(colorama.Fore.GREEN + "\r\nCancel to create config.json.")
+        print(colorama.Fore.GREEN + "\r\nCancel to create maltose.json.")
         raise SystemExit(0)
