@@ -2,6 +2,13 @@
 
 一个使用Django编写的静态博客生成器。
 
+![](example.png)
+
+拥有如下功能
+
+- [x] 内置图片管理
+- [x] Makrdown编辑器 in web
+
 ## 快速开始
 
 ```
