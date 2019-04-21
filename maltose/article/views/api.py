@@ -124,7 +124,7 @@ class ArticleView(ModelApiView):
     """
     Model = Article
     list_exclude = ('source', 'body')
-    inherit_method_list = ('post', 'put', 'delete', 'patch')
+    inherit_method_list = ('post', 'put', 'delete')
 
     def get(self, request):
         if request.GET.get('id') is not None:
@@ -135,6 +135,19 @@ class ArticleView(ModelApiView):
             obj.to_dict(exclude=self.list_exclude)
             for obj in self.Model.objects.all().order_by('-create_time')
         ])
+
+    def patch(self, request):
+        obj = self.Model.objects.get(id=request.GET.get('id'))
+        init_data = model_to_dict(obj)
+        init_data.update(self.data)
+        fields = [each for each in self.data.keys()]
+        if len(fields) == 2 and "source" in fields and "body" in fields:
+            obj.onlychange_content = True
+        form = self.Form(init_data, request.FILES, instance=obj)
+        if form.is_valid():
+            obj = form.save(commit=True)
+            return restful("更改成功", data=obj.to_dict())
+        return restful(error=form.errors, status=400)
 
 
 class TagView(ModelApiView):
