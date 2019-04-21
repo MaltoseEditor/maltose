@@ -16,7 +16,7 @@ NAME = 'maltose'
 DESCRIPTION = 'A static blog builder power by django'
 URL = 'https://github.com/MaltoseEditor/maltose'
 EMAIL = 'abersheeran@qq.com'
-AUTHOR = 'Aber Sheeran'
+AUTHOR = 'AberSheeran'
 REQUIRES_PYTHON = '>=3.6.0'
 VERSION = None
 
@@ -26,23 +26,8 @@ REQUIRED = [
     "Pillow",
     "Markdown",
     "Pygments",
+    "colorama",
 ]
-
-try:
-    import pipenv
-    from pipenv.vendor.requirementslib.models.pipfile import Pipfile
-
-    try:
-        packages = Pipfile().get("packages")
-        for name, version in packages.items():
-            if version == "*":
-                REQUIRED.append(name)
-            else:
-                REQUIRED.append("{}{}".format(name, version))
-    except pipenv.vendor.requirementslib.exceptions.RequirementError:
-        pass
-except ImportError:
-    pass
 
 # What packages are optional?
 EXTRAS = {
