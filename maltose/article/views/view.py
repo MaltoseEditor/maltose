@@ -96,11 +96,7 @@ class Feed(_Feed):
 
 
 def home(request):
-    timelist = Article.all().annotate(date=TruncYear('create_time')).values('date').distinct().order_by().order_by('-date')
-    for year in timelist:
-        year['months'] = Article.all().filter(create_time__year=year['date'].year).annotate(date=TruncMonth('create_time')).values('date').distinct().order_by().order_by('-date')
-        for month in year['months']:
-            month['articles'] = Article.all().filter(create_time__year=year['date'].year, create_time__month=month['date'].month)
+    articles = Article.all()
     return render(request, 'article/home.html', context=locals())
 
 
