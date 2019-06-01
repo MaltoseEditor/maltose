@@ -21,7 +21,8 @@ register = template.Library()
     十一月为辜
     十二月为涂
 """
-MONTH = [
+月份 = [
+    "",
     "陬",
     "如",
     "寎",
@@ -36,7 +37,17 @@ MONTH = [
     "涂"
 ]
 
+天干 = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
+地支 = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戍", "亥"]
+
 
 @register.filter
 def chinese_month(month):
-    return MONTH[int(month) - 1]
+    return 月份[int(month)]
+
+
+@register.filter
+def chinese_year(year):
+    """1984年为甲子年"""
+    sub = int(year) - 1984
+    return 天干[sub % 10]+地支[sub % 12]
