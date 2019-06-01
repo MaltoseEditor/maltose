@@ -155,6 +155,7 @@ MARKDOWN = {
         'markdown.extensions.tables',
         'markdown.extensions.codehilite',
         'markdown.extensions.nl2br',
+        'markdown.extensions.toc',
     ],
     "extension_configs": {
         "markdown.extensions.codehilite": {
