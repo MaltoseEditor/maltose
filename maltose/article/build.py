@@ -72,7 +72,8 @@ def update_feed():
 
 def update_article(article: Article):
     path = reverse('article:get_article', kwargs={"slug": article.slug})
-    create(path)
+    if not article.is_draft:
+        create(path)
 
 
 def update_tag(tag: Tag):
