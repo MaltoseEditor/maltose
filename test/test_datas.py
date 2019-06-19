@@ -1,0 +1,1 @@
+from src.datas.xml import update_rss
