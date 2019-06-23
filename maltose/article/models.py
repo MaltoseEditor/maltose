@@ -30,16 +30,19 @@ class Corpus(models.Model, ModelSerializationMixin):
 
 
 class Article(models.Model, ModelSerializationMixin):
-    title = models.CharField("标题", max_length=25, unique=True)
-    slug = models.SlugField("自定义链接", unique=True)
     create_time = models.DateTimeField("创建时间", auto_now_add=True)
     update_time = models.DateTimeField("更新时间", auto_now=True)
+
+    title = models.CharField("标题", max_length=25, unique=True)
+    slug = models.SlugField("自定义链接", unique=True)
     # 由前端进行Markdown渲染, 能保证显示的及时性并减少服务器压力
     # source存在的意义仅为储存原始的markdown内容, 页面中应直接使用body
     source = models.TextField("Markdown", blank=True)
     body = models.TextField("文章内容", blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     corpus = models.ForeignKey(Corpus, on_delete=models.SET_NULL, blank=True, null=True)
+
+    has_timeliness = models.BooleanField("具有时效性", default=False)
     is_draft = models.BooleanField("暂不发表", default=True)
     is_public = models.BooleanField("全部公开", default=True)
 
