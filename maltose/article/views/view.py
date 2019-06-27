@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db.models.functions.datetime import TruncYear, TruncMonth
+from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, HttpResponse, Http404
 from django.contrib.syndication.views import Feed as _Feed
@@ -54,7 +55,7 @@ class Sitemap(_Sitemap):
     protocol = 'https'
 
     def items(self):
-        return Article.all()
+        return Article.visible()
 
     def lastmod(self, obj: Article):
         return obj.update_time
@@ -74,7 +75,7 @@ class Feed(_Feed):
         """
         需要显示的内容条目
         """
-        return Article.all()
+        return Article.visible()
 
     def item_title(self, item):
         """
@@ -96,24 +97,29 @@ class Feed(_Feed):
 
 
 def home(request):
-    timelist = Article.all().annotate(date=TruncYear('create_time')).values('date').distinct().order_by().order_by('-date')
+    timelist = Article.visible().annotate(date=TruncYear('create_time')).values('date').distinct().order_by().order_by('-date')
     for year in timelist:
-        year['months'] = Article.all().filter(create_time__year=year['date'].year).annotate(date=TruncMonth('create_time')).values('date').distinct().order_by().order_by('-date')
+        year['months'] = Article.visible().filter(create_time__year=year['date'].year).annotate(date=TruncMonth('create_time')).values('date').distinct().order_by().order_by('-date')
         for month in year['months']:
-            month['articles'] = Article.all().filter(create_time__year=year['date'].year, create_time__month=month['date'].month)
+            month['articles'] = Article.visible().filter(create_time__year=year['date'].year, create_time__month=month['date'].month)
     return render(request, 'article/home.html', context=locals())
 
 
 def get_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
 
-    if article.corpus is None:
-        articles = Article.objects.all()
-    else:
-        articles = Article.objects.filter(corpus=article.corpus)
+    articles = Article.visible()
+    if article.corpus is not None:
+        articles = articles.filter(corpus=article.corpus)
 
-    before = articles.filter(create_time__lt=article.create_time).first()
-    after = articles.filter(create_time__gt=article.create_time).last()
+    before = articles.filter(
+        Q(create_time__lt=article.create_time) &
+        ~Q(id=article.id)
+    ).first()
+    after = articles.filter(
+        Q(create_time__gt=article.create_time) &
+        ~Q(id=article.id)
+    ).last()
 
     return render(request, 'article/article.html', context={
         "article": article,
@@ -124,18 +130,18 @@ def get_article(request, slug):
 
 def get_tag(request, name):
     tag = get_object_or_404(Tag, name=name)
-    articles = Article.all().filter(tags=tag)
+    articles = Article.visible().filter(tags=tag)
     return render(request, 'article/tag.html', context=locals())
 
 
 def get_corpus(request, name):
     corpus = get_object_or_404(Corpus, name=name)
-    articles = Article.all().filter(corpus=corpus)
+    articles = Article.visible().filter(corpus=corpus)
     return render(request, 'article/corpus.html', context=locals())
 
 
 def get_time(request, year, month):
-    articles = Article.all().filter(create_time__year=year, create_time__month=month)
+    articles = Article.visible().filter(create_time__year=year, create_time__month=month)
     if articles.count() == 0:
         raise Http404("当前日期无任何文章")
     return render(request, 'article/time.html', context=locals())

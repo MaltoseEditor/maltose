@@ -46,9 +46,9 @@ class Article(models.Model, ModelSerializationMixin):
     is_draft = models.BooleanField("暂不发表", default=True)
     is_public = models.BooleanField("全部公开", default=True)
 
-    @staticmethod
-    def all():
-        return Article.objects.filter(is_public=True, is_draft=False)
+    @classmethod
+    def visible(cls):
+        return cls.objects.filter(is_public=True, is_draft=False)
 
     def get_absolute_url(self):
         return reverse('article:get_article', kwargs={"slug": self.slug})

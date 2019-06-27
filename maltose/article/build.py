@@ -103,10 +103,10 @@ def update_all():
     for tag in Tag.objects.annotate(count=Count('article')).filter(count__gte=0):
         update_tag(tag)
 
-    for time in Article.all().dates('create_time', 'month', order='DESC'):
+    for time in Article.visible().dates('create_time', 'month', order='DESC'):
         update_time(time.year, time.strftime('%m'))
 
-    for article in Article.all():
+    for article in Article.visible():
         update_article(article)
 
     update_home()
