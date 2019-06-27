@@ -106,7 +106,20 @@ def home(request):
 
 def get_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
-    return render(request, 'article/article.html', context=locals())
+
+    if article.corpus is None:
+        articles = Article.objects.all()
+    else:
+        articles = Article.objects.filter(corpus=article.corpus)
+
+    before = articles.filter(create_time__lt=article.create_time).first()
+    after = articles.filter(create_time__gt=article.create_time).last()
+
+    return render(request, 'article/article.html', context={
+        "article": article,
+        "before": before,
+        "after": after
+    })
 
 
 def get_tag(request, name):
