@@ -112,3 +112,6 @@ def update_all():
     update_home()
     update_feed()
     update_sitemap()
+    update_o("404")
+    update_o("about")
+    update_o("donation")
