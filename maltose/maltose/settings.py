@@ -80,6 +80,7 @@ TEMPLATES = [
                 'maltose.article.context_processors.get_all_timelist',
                 'maltose.article.context_processors.get_all_corpus',
                 'maltose.article.context_processors.get_all_tag',
+                'maltose.article.context_processors.get_latest_update',
                 'maltose.sundries.context_processors.get_all_friend',
             ],
         },

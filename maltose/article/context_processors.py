@@ -23,3 +23,9 @@ def get_all_timelist(request):
     time_list = Article.visible().annotate(date=TruncMonth('create_time')).values('date').distinct() \
         .annotate(count=Count('id')).values('date', 'count').order_by().order_by('-date')
     return {"time_list": time_list}
+
+
+def get_latest_update(request):
+    """最近更新的文章"""
+    articles = Article.visible().order_by('-update_time')[:6]
+    return {"latest_update": articles}
