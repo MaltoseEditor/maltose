@@ -132,7 +132,7 @@ class ArticleView(ModelApiView):
             return restful(data=obj.to_dict(relation=True))
 
         return restful(data=[
-            obj.to_dict(exclude=self.list_exclude)
+            obj.to_dict(exclude=self.list_exclude, relation=True)
             for obj in self.Model.objects.all().order_by('-create_time')
         ])
 

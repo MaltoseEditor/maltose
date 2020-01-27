@@ -22,7 +22,7 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    "Django",
+    "Django==2.2",
     "Pillow",
     "Markdown",
     "Pygments",
