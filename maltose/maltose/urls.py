@@ -24,29 +24,40 @@ from django.contrib.auth.decorators import login_required
 
 from .views import coding_webhook, github_webhook, push
 
-admin.site.site_header = 'Maltose | 后台管理'
-admin.site.site_title = 'Maltose'
-admin.site.index_title = 'Maltose'
+admin.site.site_header = "Maltose | 后台管理"
+admin.site.site_title = "Maltose"
+admin.site.index_title = "Maltose"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('coding-webhook', coding_webhook),
-    path('github-webhook', github_webhook),
-    path('push', push),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path("admin/", admin.site.urls),
+    path("coding-webhook", coding_webhook),
+    path("github-webhook", github_webhook),
+    path("push", push),
+    path("accounts/", include("django.contrib.auth.urls")),
     # 后台界面
-    path('editor/', serve, kwargs={"path": 'index.html', "document_root": settings.EDITOR_ROOT}),
-    re_path(r'^editor/(?P<path>.*)$', serve, kwargs={"document_root": settings.EDITOR_ROOT}),
-
-    path('', include('maltose.article.urls')),
+    path(
+        "editor/",
+        serve,
+        kwargs={"path": "index.html", "document_root": settings.EDITOR_ROOT},
+    ),
+    re_path(
+        r"^editor/(?P<path>.*)$", serve, kwargs={"document_root": settings.EDITOR_ROOT}
+    ),
+    path("", include("maltose.article.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if not settings.DEBUG:
     urlpatterns += [
-        re_path(r'^%s(?P<path>.*)$' % re.escape(settings.STATIC_URL.lstrip('/')), serve,
-                kwargs={"document_root": settings.STATICFILES_DIRS[0]}),
-        re_path(r'^%s(?P<path>.*)$' % re.escape(settings.MEDIA_URL.lstrip('/')), serve,
-                kwargs={"document_root": settings.MEDIA_ROOT}),
+        re_path(
+            r"^%s(?P<path>.*)$" % re.escape(settings.STATIC_URL.lstrip("/")),
+            serve,
+            kwargs={"document_root": settings.STATICFILES_DIRS[0]},
+        ),
+        re_path(
+            r"^%s(?P<path>.*)$" % re.escape(settings.MEDIA_URL.lstrip("/")),
+            serve,
+            kwargs={"document_root": settings.MEDIA_ROOT},
+        ),
     ]

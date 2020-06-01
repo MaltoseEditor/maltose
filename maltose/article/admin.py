@@ -14,11 +14,11 @@ class ImageAdmin(admin.TabularInline):
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     inlines = [ReferenceAdmin, ImageAdmin]
-    list_display = ('title', 'create_time', 'update_time', 'is_draft', 'is_public')
+    list_display = ("title", "create_time", "update_time", "is_draft", "is_public")
     # list_editable = ('is_draft', 'is_public')
-    fields = ('title', 'slug', 'corpus', 'tags')
-    filter_horizontal = ('tags',)
-    list_filter = ('is_draft', 'is_public')
+    fields = ("title", "slug", "corpus", "tags")
+    filter_horizontal = ("tags",)
+    list_filter = ("is_draft", "is_public")
 
 
 @admin.register(Tag)

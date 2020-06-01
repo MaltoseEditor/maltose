@@ -19,7 +19,9 @@ def push(request):
 def coding_webhook(request):
     event = request.META.get("HTTP_X_CODING_EVENT")
     signature = request.META.get("HTTP_X_CODING_SIGNATURE", "").replace("sha1=", "")
-    mac = hmac.new(settings.WEBHOOK_TOKEN.encode("ASCII"), msg=request.body, digestmod=sha1)
+    mac = hmac.new(
+        settings.WEBHOOK_TOKEN.encode("ASCII"), msg=request.body, digestmod=sha1
+    )
     if not hmac.compare_digest(str(mac.hexdigest()), str(signature)):
         return HttpResponseForbidden("What do you want to do?")
     if event == "ping":

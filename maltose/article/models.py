@@ -4,9 +4,7 @@ from django.urls import reverse
 
 from maltose.maltose.models import ModelSerializationMixin
 
-__all__ = (
-    "Tag", 'Corpus', 'Article', 'Reference', 'Image'
-)
+__all__ = ("Tag", "Corpus", "Article", "Reference", "Image")
 
 
 class Tag(models.Model, ModelSerializationMixin):
@@ -16,7 +14,7 @@ class Tag(models.Model, ModelSerializationMixin):
         return self.name
 
     def get_absolute_url(self):
-        return f'/tags/{self.name}/'
+        return f"/tags/{self.name}/"
 
 
 class Corpus(models.Model, ModelSerializationMixin):
@@ -26,7 +24,7 @@ class Corpus(models.Model, ModelSerializationMixin):
         return self.name
 
     def get_absolute_url(self):
-        return f'/corpus/{self.name}/'
+        return f"/corpus/{self.name}/"
 
 
 class Article(models.Model, ModelSerializationMixin):
@@ -51,10 +49,10 @@ class Article(models.Model, ModelSerializationMixin):
         return cls.objects.filter(is_public=True, is_draft=False)
 
     def get_absolute_url(self):
-        return reverse('article:get_article', kwargs={"slug": self.slug})
+        return reverse("article:get_article", kwargs={"slug": self.slug})
 
     class Meta:
-        ordering = ['-create_time']
+        ordering = ["-create_time"]
 
     def __str__(self):
         return self.title
@@ -70,7 +68,7 @@ class Reference(models.Model, ModelSerializationMixin):
 
 
 class Image(models.Model, ModelSerializationMixin):
-    file = models.ImageField("路径", upload_to='')
+    file = models.ImageField("路径", upload_to="")
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -6,13 +6,20 @@ from django.core.files import File
 
 
 class ModelSerializationMixin:
-
     @staticmethod
     def get_exclude():
         return []
 
     @staticmethod
-    def _to_dict(model, fields=None, exclude=None, relation=False, relation_data=None, raw_data=False, **kwargs):
+    def _to_dict(
+        model,
+        fields=None,
+        exclude=None,
+        relation=False,
+        relation_data=None,
+        raw_data=False,
+        **kwargs
+    ):
         """
         将Model对象序列化
 
@@ -51,7 +58,7 @@ class ModelSerializationMixin:
                     continue
                 if isinstance(field, models.ManyToManyRel):
                     if field.related_name is None:
-                        querySet = getattr(model, field.name + '_set').all()
+                        querySet = getattr(model, field.name + "_set").all()
                     else:
                         querySet = getattr(model, field.related_name).all()
                 else:
@@ -64,7 +71,7 @@ class ModelSerializationMixin:
                 if not relation:
                     continue
                 if field.related_name is None:
-                    querySet = getattr(model, field.name + '_set').all()
+                    querySet = getattr(model, field.name + "_set").all()
                 else:
                     querySet = getattr(model, field.related_name).all()
                 if relation_data:
@@ -77,7 +84,7 @@ class ModelSerializationMixin:
                 if relation_data:
                     result[field.name] = model._to_dict(getattr(model, field.name))
                 else:
-                    result[field.name] = getattr(model, field.name + '_id')
+                    result[field.name] = getattr(model, field.name + "_id")
             else:
                 result[field.name] = getattr(model, field.name)
 
@@ -85,16 +92,31 @@ class ModelSerializationMixin:
                 if isinstance(result[field.name], datetime.date):
                     result[field.name] = result[field.name].strftime("%Y-%m-%d")
                 elif isinstance(result[field.name], datetime.datetime):
-                    result[field.name] = result[field.name].strftime("%Y-%m-%d %H:%M:%S")
+                    result[field.name] = result[field.name].strftime(
+                        "%Y-%m-%d %H:%M:%S"
+                    )
                 elif isinstance(result[field.name], (File,)):
                     result[field.name] = settings.MEDIA_URL + str(result[field.name])
 
         result.update(**kwargs)
         return result
 
-    def to_dict(self, *, fields=None, exclude=None, relation=False, relation_data=None, raw_data=False, **kwargs):
-        return self._to_dict(self,
-                             fields=fields, exclude=exclude,
-                             relation=relation, relation_data=relation_data,
-                             raw_data=raw_data,
-                             **kwargs)
+    def to_dict(
+        self,
+        *,
+        fields=None,
+        exclude=None,
+        relation=False,
+        relation_data=None,
+        raw_data=False,
+        **kwargs
+    ):
+        return self._to_dict(
+            self,
+            fields=fields,
+            exclude=exclude,
+            relation=relation,
+            relation_data=relation_data,
+            raw_data=raw_data,
+            **kwargs
+        )

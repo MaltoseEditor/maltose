@@ -21,4 +21,8 @@ def create_dict(local=None, field=None, **kwargs):
 
 def push():
     """推送生成的静态页面到远程仓库"""
-    return subprocess.Popen('git pull && git add . && git commit -m "Auto commit by Maltose" && git push', cwd=settings.BLOG_REPOSITORIES, shell=True)
+    return subprocess.Popen(
+        'git pull && git add . && git commit -m "Auto commit by Maltose" && git push',
+        cwd=settings.BLOG_REPOSITORIES,
+        shell=True,
+    )

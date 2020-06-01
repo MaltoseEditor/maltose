@@ -23,33 +23,37 @@ from .views import *
 
 def serve(request, path):
     if path == "" or path[-1] == "/":
-        path += 'index.html'
+        path += "index.html"
     return _serve(request, path, settings.BLOG_REPOSITORIES)
 
 
-app_name = 'article'
+app_name = "article"
 
 urlpatterns = [
-    path('', home, name='get_home'),
-    path('articles/<str:slug>/', get_article, name="get_article"),
-    path('tags/<str:name>/', get_tag, name="get_tag"),
-    path('corpus/<str:name>/', get_corpus, name="get_corpus"),
-    path('time/<int:year>/<int:month>/', get_time, name='get_time'),
-    path('about/', about, name="get_about"),
-    path('about/feedback.html', feedback, name="get_feedback"),
-    path('about/donation.html', donation, name="get_donation"),
-    path('404.html', page_not_found, name="get_404"),
-    path('sitemap.xml', sitemap, kwargs={'sitemaps': {"article": Sitemap}}, name="get_sitemap"),
-    path('feed.xml', Feed(), name="get_feed"),
+    path("", home, name="get_home"),
+    path("articles/<str:slug>/", get_article, name="get_article"),
+    path("tags/<str:name>/", get_tag, name="get_tag"),
+    path("corpus/<str:name>/", get_corpus, name="get_corpus"),
+    path("time/<int:year>/<int:month>/", get_time, name="get_time"),
+    path("about/", about, name="get_about"),
+    path("about/feedback.html", feedback, name="get_feedback"),
+    path("about/donation.html", donation, name="get_donation"),
+    path("404.html", page_not_found, name="get_404"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        kwargs={"sitemaps": {"article": Sitemap}},
+        name="get_sitemap",
+    ),
+    path("feed.xml", Feed(), name="get_feed"),
     # 模型操作Api
-    path('api/article/', ArticleView.as_view(), name='api_article'),
-    path('api/tag/', TagView.as_view(), name='api_tag'),
-    path('api/corpus/', CorpusView.as_view(), name='api_corpus'),
-    path('api/reference/', ReferenceView.as_view(), name='api_reference'),
-    path('api/image/', ImageView.as_view(), name='api_image'),
+    path("api/article/", ArticleView.as_view(), name="api_article"),
+    path("api/tag/", TagView.as_view(), name="api_tag"),
+    path("api/corpus/", CorpusView.as_view(), name="api_corpus"),
+    path("api/reference/", ReferenceView.as_view(), name="api_reference"),
+    path("api/image/", ImageView.as_view(), name="api_image"),
     # 使用Python渲染的Api
-    path('api/render/', RenderView.as_view(), name="api_render"),
-
+    path("api/render/", RenderView.as_view(), name="api_render"),
     # 在其他url规则无法匹配到时, 自动调用此函数模拟Github Page
-    re_path(r'^(?P<path>.*)$', serve),
+    re_path(r"^(?P<path>.*)$", serve),
 ]

@@ -11,12 +11,12 @@ from maltose.article import render as markdown
 from maltose.article.models import Article, Tag, Corpus, Reference, Image
 
 __all__ = [
-    'ArticleView',
-    'TagView',
-    'CorpusView',
-    'ReferenceView',
-    'ImageView',
-    'RenderView',
+    "ArticleView",
+    "TagView",
+    "CorpusView",
+    "ReferenceView",
+    "ImageView",
+    "RenderView",
 ]
 
 
@@ -29,21 +29,23 @@ def restful(message="", error=None, data=None, status=200, **kwargs):
     :param kwargs: JsonResponse的其他参数
     :return:
     """
-    return JsonResponse({"message": message, "error": error, "data": data}, status=status, **kwargs)
+    return JsonResponse(
+        {"message": message, "error": error, "data": data}, status=status, **kwargs
+    )
 
 
 class LoginRequiredView(View):
-
     def dispatch(self, request, *args, **kwargs):
         if settings.DEBUG or request.user.is_authenticated:
             return super().dispatch(request, *args, **kwargs)
-        return restful(message='未登陆', error='没有携带Cookies或Cookies失效', status=403)
+        return restful(message="未登陆", error="没有携带Cookies或Cookies失效", status=403)
 
 
 class ModelApiView(LoginRequiredView):
     """
     对模型进行操作的Api视图
     """
+
     Model = None  # 此Api操作的模型
     Form = None  # 用于post, put, patch方法中处理数据的Form表单
     list_exclude = None  # 排除(读取全部数据/创建数据)时的部分字段, 需要一个可迭代对象 例如 ('password', 'email')
@@ -51,21 +53,22 @@ class ModelApiView(LoginRequiredView):
 
     def __init__(self, **kwargs):
         for each in self.inherit_method_list:
-            setattr(self, each, getattr(self, '_' + each))
+            setattr(self, each, getattr(self, "_" + each))
         super().__init__(**kwargs)
         if self.Form is None:
+
             class DefaultForm(ModelForm):
                 class Meta:
                     model = self.Model
-                    fields = '__all__'
+                    fields = "__all__"
 
             self.Form = DefaultForm
 
     def dispatch(self, request, *args, **kwargs):
         request.json = None
-        if request.content_type == 'application/json':
+        if request.content_type == "application/json":
             request.json = json.loads(request.body)
-        elif request.method != 'POST':  # 对于非json格式的非post请求, 也进行解析
+        elif request.method != "POST":  # 对于非json格式的非post请求, 也进行解析
             request.POST = QueryDict(request.body)
         self.data = request.POST if request.json is None else request.json
         # 捕获所有请求中的Model.DoesNotExist, 统一回复
@@ -75,14 +78,16 @@ class ModelApiView(LoginRequiredView):
             return restful("请求的数据不存在", status=404)
 
     def _get(self, request):
-        if request.GET.get('id') is not None:
-            obj = self.Model.objects.get(id=request.GET.get('id'))
+        if request.GET.get("id") is not None:
+            obj = self.Model.objects.get(id=request.GET.get("id"))
             return restful(data=obj.to_dict(relation=True))
 
-        return restful(data=[
-            obj.to_dict(exclude=self.list_exclude)
-            for obj in self.Model.objects.all()
-        ])
+        return restful(
+            data=[
+                obj.to_dict(exclude=self.list_exclude)
+                for obj in self.Model.objects.all()
+            ]
+        )
 
     def _post(self, request):
         form = self.Form(self.data, request.FILES)
@@ -92,7 +97,7 @@ class ModelApiView(LoginRequiredView):
         return restful(error=form.errors, status=400)
 
     def _put(self, request):
-        obj = self.Model.objects.get(id=request.GET.get('id'))
+        obj = self.Model.objects.get(id=request.GET.get("id"))
         form = self.Form(self.data, request.FILES, instance=obj)
         if form.is_valid():
             obj = form.save(commit=True)
@@ -100,7 +105,7 @@ class ModelApiView(LoginRequiredView):
         return restful(error=form.errors, status=400)
 
     def _patch(self, request):
-        obj = self.Model.objects.get(id=request.GET.get('id'))
+        obj = self.Model.objects.get(id=request.GET.get("id"))
         init_data = model_to_dict(obj)
         init_data.update(self.data)
         form = self.Form(init_data, request.FILES, instance=obj)
@@ -110,7 +115,7 @@ class ModelApiView(LoginRequiredView):
         return restful(error=form.errors, status=400)
 
     def _delete(self, request):
-        obj = self.Model.objects.get(id=request.GET.get('id'))
+        obj = self.Model.objects.get(id=request.GET.get("id"))
         try:
             obj.delete()
         except Exception as e:
@@ -122,22 +127,25 @@ class ArticleView(ModelApiView):
     """
     对文章的操作
     """
+
     Model = Article
-    list_exclude = ('source', 'body')
-    inherit_method_list = ('post', 'put', 'delete')
+    list_exclude = ("source", "body")
+    inherit_method_list = ("post", "put", "delete")
 
     def get(self, request):
-        if request.GET.get('id') is not None:
-            obj = self.Model.objects.get(id=request.GET.get('id'))
+        if request.GET.get("id") is not None:
+            obj = self.Model.objects.get(id=request.GET.get("id"))
             return restful(data=obj.to_dict(relation=True))
 
-        return restful(data=[
-            obj.to_dict(exclude=self.list_exclude, relation=True)
-            for obj in self.Model.objects.all().order_by('-create_time')
-        ])
+        return restful(
+            data=[
+                obj.to_dict(exclude=self.list_exclude, relation=True)
+                for obj in self.Model.objects.all().order_by("-create_time")
+            ]
+        )
 
     def patch(self, request):
-        obj = self.Model.objects.get(id=request.GET.get('id'))
+        obj = self.Model.objects.get(id=request.GET.get("id"))
         init_data = model_to_dict(obj)
         init_data.update(self.data)
         fields = [each for each in self.data.keys()]
@@ -154,32 +162,36 @@ class TagView(ModelApiView):
     """
     对标签的操作
     """
+
     Model = Tag
-    inherit_method_list = ['get', 'post', 'delete']
+    inherit_method_list = ["get", "post", "delete"]
 
 
 class CorpusView(ModelApiView):
     """
     对文集的操作
     """
+
     Model = Corpus
-    inherit_method_list = ['get', 'post', 'delete']
+    inherit_method_list = ["get", "post", "delete"]
 
 
 class ReferenceView(ModelApiView):
     """
     对引用链接的操作
     """
+
     Model = Reference
-    inherit_method_list = ['post', 'patch', 'delete']
+    inherit_method_list = ["post", "patch", "delete"]
 
 
 class ImageView(ModelApiView):
     """
     对图片的操作
     """
+
     Model = Image
-    inherit_method_list = ['post', 'delete']
+    inherit_method_list = ["post", "delete"]
 
 
 class RenderView(View):
@@ -188,10 +200,10 @@ class RenderView(View):
     """
 
     def post(self, request):
-        if request.content_type == 'application/json':
-            source = json.loads(request.body).get('source')
+        if request.content_type == "application/json":
+            source = json.loads(request.body).get("source")
         else:
-            source = request.POST.get('source')
+            source = request.POST.get("source")
         if source is not None:
             return restful(data={"result": markdown(source)})
         return restful("未接收到source", {"request.body": str(request.body)}, status=400)

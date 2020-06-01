@@ -4,7 +4,6 @@ from django.conf import settings
 
 
 class RequestHostMiddleware(MiddlewareMixin):
-
     def process_request(self, request):
         if request.get_host() == "testserver":
-            request.META['HTTP_HOST'] = settings.HOMEPAGE.split("://")[1].split("/")[0]
+            request.META["HTTP_HOST"] = settings.HOMEPAGE.split("://")[1].split("/")[0]

@@ -1,1 +1,1 @@
-default_app_config = 'maltose.sundries.apps.SundriesConfig'
+default_app_config = "maltose.sundries.apps.SundriesConfig"

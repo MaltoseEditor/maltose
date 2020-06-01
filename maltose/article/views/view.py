@@ -9,18 +9,20 @@ from django.contrib.sitemaps import Sitemap as _Sitemap
 from maltose.maltose.common import create_dict
 from maltose.article.models import Article, Tag, Corpus
 
+from .. import get_toc
+
 __all__ = [
-    'home',
-    'about',
-    'donation',
-    'feedback',
-    'Sitemap',
-    'Feed',
-    'get_article',
-    'get_tag',
-    'get_corpus',
-    'get_time',
-    'page_not_found',
+    "home",
+    "about",
+    "donation",
+    "feedback",
+    "Sitemap",
+    "Feed",
+    "get_article",
+    "get_tag",
+    "get_corpus",
+    "get_time",
+    "page_not_found",
 ]
 
 
@@ -28,15 +30,20 @@ class PaginatorView:
     """
     分页, 可以直接使用 /page/1/ 这种形式的url
     """
+
     template = None
 
     def __call__(self, *args, **kwargs):
         context = self.get_context(*args, **kwargs)
-        context.update(self.get_paginator(context["articles"], kwargs.get('page') if kwargs.get('page') else 1))
+        context.update(
+            self.get_paginator(
+                context["articles"], kwargs.get("page") if kwargs.get("page") else 1
+            )
+        )
         return render(args[0], self.template, context)
 
     def get_context(self, *args, **kwargs):
-        return {'articles': []}
+        return {"articles": []}
 
     @staticmethod
     def get_paginator(articles, page):
@@ -47,12 +54,14 @@ class PaginatorView:
             articles = paginator.page(1)
         except EmptyPage:
             articles = paginator.page(paginator.num_pages)
-        empty_list = ['' for _ in range(settings.PAGE_MAX_NUM - articles.object_list.count())]
-        return create_dict(locals(), ['articles', 'empty_list'])
+        empty_list = [
+            "" for _ in range(settings.PAGE_MAX_NUM - articles.object_list.count())
+        ]
+        return create_dict(locals(), ["articles", "empty_list"])
 
 
 class Sitemap(_Sitemap):
-    protocol = 'https'
+    protocol = "https"
 
     def items(self):
         return Article.visible()
@@ -97,60 +106,86 @@ class Feed(_Feed):
 
 
 def home(request):
-    timelist = Article.visible().annotate(date=TruncYear('create_time')).values('date').distinct().order_by().order_by('-date')
+    timelist = (
+        Article.visible()
+        .annotate(date=TruncYear("create_time"))
+        .values("date")
+        .distinct()
+        .order_by()
+        .order_by("-date")
+    )
     for year in timelist:
-        year['months'] = Article.visible().filter(create_time__year=year['date'].year).annotate(date=TruncMonth('create_time')).values('date').distinct().order_by().order_by('-date')
-        for month in year['months']:
-            month['articles'] = Article.visible().filter(create_time__year=year['date'].year, create_time__month=month['date'].month)
-    return render(request, 'article/home.html', context=locals())
+        year["months"] = (
+            Article.visible()
+            .filter(create_time__year=year["date"].year)
+            .annotate(date=TruncMonth("create_time"))
+            .values("date")
+            .distinct()
+            .order_by()
+            .order_by("-date")
+        )
+        for month in year["months"]:
+            month["articles"] = Article.visible().filter(
+                create_time__year=year["date"].year,
+                create_time__month=month["date"].month,
+            )
+    return render(request, "article/home.html", context=locals())
 
 
 def get_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
 
-    before = Article.visible().filter(corpus=article.corpus).filter(
-        Q(create_time__lt=article.create_time) &
-        ~Q(id=article.id)
-    ).first()
+    before = (
+        Article.visible()
+        .filter(corpus=article.corpus)
+        .filter(Q(create_time__lt=article.create_time) & ~Q(id=article.id))
+        .first()
+    )
 
-    after = Article.visible().filter(corpus=article.corpus).filter(
-        Q(create_time__gt=article.create_time) &
-        ~Q(id=article.id)
-    ).last()
+    after = (
+        Article.visible()
+        .filter(corpus=article.corpus)
+        .filter(Q(create_time__gt=article.create_time) & ~Q(id=article.id))
+        .last()
+    )
 
-    return render(request, 'article/article.html', context=locals())
+    toc = get_toc(article.source)
+
+    return render(request, "article/article.html", context=locals())
 
 
 def get_tag(request, name):
     tag = get_object_or_404(Tag, name=name)
     articles = Article.visible().filter(tags=tag)
-    return render(request, 'article/tag.html', context=locals())
+    return render(request, "article/tag.html", context=locals())
 
 
 def get_corpus(request, name):
     corpus = get_object_or_404(Corpus, name=name)
     articles = Article.visible().filter(corpus=corpus)
-    return render(request, 'article/corpus.html', context=locals())
+    return render(request, "article/corpus.html", context=locals())
 
 
 def get_time(request, year, month):
-    articles = Article.visible().filter(create_time__year=year, create_time__month=month)
+    articles = Article.visible().filter(
+        create_time__year=year, create_time__month=month
+    )
     if articles.count() == 0:
         raise Http404("当前日期无任何文章")
-    return render(request, 'article/time.html', context=locals())
+    return render(request, "article/time.html", context=locals())
 
 
 def about(request):
-    return render(request, 'article/about.html')
+    return render(request, "article/about.html")
 
 
 def donation(request):
-    return render(request, 'article/donation.html')
+    return render(request, "article/donation.html")
 
 
 def feedback(request):
-    return render(request, 'article/feedback.html')
+    return render(request, "article/feedback.html")
 
 
 def page_not_found(request):
-    return render(request, 'article/404.html')
+    return render(request, "article/404.html")

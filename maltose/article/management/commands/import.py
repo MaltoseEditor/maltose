@@ -6,7 +6,7 @@ import markdown
 from article.models import Article, Tag, Corpus
 
 # TODO 导入文章
-'''
+"""
 class Command(BaseCommand):
     help = '从指定目录中导入博文'
 
@@ -51,4 +51,4 @@ class Command(BaseCommand):
             with open(os.path.join(path, eachfile)) as file:
                 data = file.read()
             info, md = self.get_info(data)
-'''
+"""

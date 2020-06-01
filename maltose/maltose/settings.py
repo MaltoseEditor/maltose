@@ -21,81 +21,79 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 BLOG_REPOSITORIES = os.getcwd()
 
-TEMPLATE_PATH = os.path.join(BLOG_REPOSITORIES, 'templates')
+TEMPLATE_PATH = os.path.join(BLOG_REPOSITORIES, "templates")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rxg8fkn2!7so98jxric1jqhi(!(5d=x-b_)9gyyr6qun9n==7n'
+SECRET_KEY = "rxg8fkn2!7so98jxric1jqhi(!(5d=x-b_)9gyyr6qun9n==7n"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", False)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
 INSTALLED_APPS = [
-    'maltose.maltose',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.sitemaps',
-    'maltose.article',
-    'maltose.sundries',
+    "maltose.maltose",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
+    "maltose.article",
+    "maltose.sundries",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'maltose.maltose.middleware.RequestHostMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "maltose.maltose.middleware.RequestHostMiddleware",
 ]
 
-ROOT_URLCONF = 'maltose.maltose.urls'
+ROOT_URLCONF = "maltose.maltose.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            TEMPLATE_PATH
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'maltose.maltose.context_processors.get_debug',
-                'maltose.maltose.context_processors.get_settings',
-                'maltose.article.context_processors.get_all_timelist',
-                'maltose.article.context_processors.get_all_corpus',
-                'maltose.article.context_processors.get_all_tag',
-                'maltose.article.context_processors.get_latest_update',
-                'maltose.sundries.context_processors.get_all_friend',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [TEMPLATE_PATH],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "maltose.maltose.context_processors.get_debug",
+                "maltose.maltose.context_processors.get_settings",
+                "maltose.article.context_processors.get_all_timelist",
+                "maltose.article.context_processors.get_all_corpus",
+                "maltose.article.context_processors.get_all_tag",
+                "maltose.article.context_processors.get_latest_update",
+                "maltose.sundries.context_processors.get_all_friend",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'maltose.maltose.wsgi.application'
+WSGI_APPLICATION = "maltose.maltose.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BLOG_REPOSITORIES, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BLOG_REPOSITORIES, "db.sqlite3"),
     }
 }
 
@@ -104,25 +102,19 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = "zh-hans"
 
-TIME_ZONE = 'Asia/Shanghai'
+TIME_ZONE = "Asia/Shanghai"
 
 USE_I18N = True
 
@@ -133,36 +125,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/templates/static/'
+STATIC_URL = "/templates/static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-STATICFILES_DIRS = (
-    os.path.join(TEMPLATE_PATH, 'static'),
-)
+STATICFILES_DIRS = (os.path.join(TEMPLATE_PATH, "static"),)
 
-MEDIA_URL = '/upload/'
+MEDIA_URL = "/upload/"
 
 MEDIA_ROOT = os.path.join(BLOG_REPOSITORIES, "upload")
 
-EDITOR_ROOT = os.path.join(BASE_DIR, 'editor/')
+EDITOR_ROOT = os.path.join(BASE_DIR, "editor/")
 
 # Markdown Render Config
 # https://github.com/Python-Markdown/markdown
 
 MARKDOWN = {
     "extensions": [
-        'markdown.extensions.extra',
-        'markdown.extensions.tables',
-        'markdown.extensions.codehilite',
-        'markdown.extensions.nl2br',
-        'markdown.extensions.toc',
+        "markdown.extensions.extra",
+        "markdown.extensions.tables",
+        "markdown.extensions.codehilite",
+        "markdown.extensions.nl2br",
+        "markdown.extensions.toc",
     ],
-    "extension_configs": {
-        "markdown.extensions.codehilite": {
-            "linenums": False,
-        }
-    }
+    "extension_configs": {"markdown.extensions.codehilite": {"linenums": False,}},
 }
 
 # WebHook Settings
@@ -175,7 +161,9 @@ WEBHOOK_TOKEN = "loveyou"
 PAGE_MAX_NUM = 13
 
 try:
-    with open(os.path.join(BLOG_REPOSITORIES, "maltose.json"), "r", encoding="UTF-8") as _Config:
+    with open(
+        os.path.join(BLOG_REPOSITORIES, "maltose.json"), "r", encoding="UTF-8"
+    ) as _Config:
         _data = json.load(_Config)
 
         for key, value in _data.items():
@@ -184,12 +172,17 @@ try:
 except FileNotFoundError:
     print(colorama.Fore.RED + "The 'maltose.json' not found")
     print(colorama.Fore.BLUE + "Creating the 'maltose.json' in root directory.")
-    print(colorama.Fore.BLUE + "If you want to create maltose.json by yourself, press Ctrl+C to quit.")
+    print(
+        colorama.Fore.BLUE
+        + "If you want to create maltose.json by yourself, press Ctrl+C to quit."
+    )
     try:
         _data = dict()
         _data["HOMEPAGE"] = input("Your blog link(like=> https://abersheeran.com): ")
 
-        with open(os.path.join(BLOG_REPOSITORIES, "maltose.json"), "w", encoding="UTF-8") as _Config:
+        with open(
+            os.path.join(BLOG_REPOSITORIES, "maltose.json"), "w", encoding="UTF-8"
+        ) as _Config:
             json.dump(_data, _Config)
 
         for key, value in _data.items():

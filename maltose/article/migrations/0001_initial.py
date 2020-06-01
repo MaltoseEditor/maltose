@@ -9,71 +9,140 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Article',
+            name="Article",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=25, unique=True, verbose_name='标题')),
-                ('slug', models.SlugField(unique=True, verbose_name='自定义链接')),
-                ('create_time', models.DateTimeField(auto_now_add=True, verbose_name='创建时间')),
-                ('update_time', models.DateTimeField(auto_now=True, verbose_name='更新时间')),
-                ('source', models.TextField(blank=True, verbose_name='Markdown')),
-                ('body', models.TextField(blank=True, verbose_name='文章内容')),
-                ('is_draft', models.BooleanField(default=True, verbose_name='暂不发表')),
-                ('is_public', models.BooleanField(default=True, verbose_name='全部公开')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(max_length=25, unique=True, verbose_name="标题"),
+                ),
+                ("slug", models.SlugField(unique=True, verbose_name="自定义链接")),
+                (
+                    "create_time",
+                    models.DateTimeField(auto_now_add=True, verbose_name="创建时间"),
+                ),
+                (
+                    "update_time",
+                    models.DateTimeField(auto_now=True, verbose_name="更新时间"),
+                ),
+                ("source", models.TextField(blank=True, verbose_name="Markdown")),
+                ("body", models.TextField(blank=True, verbose_name="文章内容")),
+                ("is_draft", models.BooleanField(default=True, verbose_name="暂不发表")),
+                ("is_public", models.BooleanField(default=True, verbose_name="全部公开")),
             ],
-            options={
-                'ordering': ['-create_time'],
-            },
+            options={"ordering": ["-create_time"],},
             bases=(models.Model, maltose.maltose.models.ModelSerializationMixin),
         ),
         migrations.CreateModel(
-            name='Corpus',
+            name="Corpus",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=20, unique=True, verbose_name='文集名')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=20, unique=True, verbose_name="文集名"),
+                ),
             ],
             bases=(models.Model, maltose.maltose.models.ModelSerializationMixin),
         ),
         migrations.CreateModel(
-            name='Image',
+            name="Image",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.ImageField(upload_to='', verbose_name='路径')),
-                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='article.Article')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("file", models.ImageField(upload_to="", verbose_name="路径")),
+                (
+                    "article",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="article.Article",
+                    ),
+                ),
             ],
             bases=(models.Model, maltose.maltose.models.ModelSerializationMixin),
         ),
         migrations.CreateModel(
-            name='Reference',
+            name="Reference",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, verbose_name='名称')),
-                ('link', models.URLField(verbose_name='链接')),
-                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='article.Article')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, verbose_name="名称")),
+                ("link", models.URLField(verbose_name="链接")),
+                (
+                    "article",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="article.Article",
+                    ),
+                ),
             ],
             bases=(models.Model, maltose.maltose.models.ModelSerializationMixin),
         ),
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=20, unique=True, verbose_name='标签名')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=20, unique=True, verbose_name="标签名"),
+                ),
             ],
             bases=(models.Model, maltose.maltose.models.ModelSerializationMixin),
         ),
         migrations.AddField(
-            model_name='article',
-            name='corpus',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='article.Corpus'),
+            model_name="article",
+            name="corpus",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="article.Corpus",
+            ),
         ),
         migrations.AddField(
-            model_name='article',
-            name='tags',
-            field=models.ManyToManyField(blank=True, to='article.Tag'),
+            model_name="article",
+            name="tags",
+            field=models.ManyToManyField(blank=True, to="article.Tag"),
         ),
     ]
